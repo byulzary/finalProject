@@ -3,9 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Barak/Desktop/FinalProject/app/src/main/res/layout-w1240dp/activity_new_list.xml" value="0.1296875" />
+        <entry key="..\:/Users/Barak/Desktop/FinalProject/app/src/main/res/layout-w936dp/activity_new_list.xml" value="0.22" />
+        <entry key="..\:/Users/Barak/Desktop/FinalProject/app/src/main/res/layout/activity_about.xml" value="0.3074074074074074" />
         <entry key="..\:/Users/Barak/Desktop/FinalProject/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Barak/Desktop/FinalProject/app/src/main/res/layout/activity_menu.xml" value="0.29444444444444445" />
+        <entry key="..\:/Users/Barak/Desktop/FinalProject/app/src/main/res/layout/activity_new_list.xml" value="0.3074074074074074" />
         <entry key="..\:/Users/Barak/Desktop/FinalProject/app/src/main/res/layout/activity_register.xml" value="0.3140625" />
+        <entry key="..\:/Users/Barak/Desktop/FinalProject/app/src/main/res/layout/activity_settings.xml" value="0.3074074074074074" />
       </map>
     </option>
   </component>

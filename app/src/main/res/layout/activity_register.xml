@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/registerImageView" />
 
     <EditText
         android:id="@+id/editPasswordReg"
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editEmailReg" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/registerImageView"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginBottom="400dp"
@@ -60,7 +60,7 @@
         android:layout_marginTop="240dp"
         android:onClick="onClick"
         android:text="Register"
-        app:layout_constraintEnd_toEndOf="@+id/imageView2"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintEnd_toEndOf="@+id/registerImageView"
+        app:layout_constraintStart_toStartOf="@+id/registerImageView"
+        app:layout_constraintTop_toBottomOf="@+id/registerImageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
