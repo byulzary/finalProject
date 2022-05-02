@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp">
+
+    <TextView
+        android:id="@+id/textViewNamePast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
+        android:text="Name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewDescriptionPast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Description"
+        app:layout_constraintEnd_toEndOf="@+id/textViewNamePast"
+        app:layout_constraintStart_toStartOf="@+id/textViewNamePast"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNamePast" />
+
+    <ImageView
+        android:id="@+id/imageViewProductPast"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewDescriptionPast"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewNamePast"
+        app:srcCompat="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/textViewNumberPast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:text="#"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewProductPast"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewProductPast"
+        app:layout_constraintTop_toTopOf="@+id/imageViewProductPast" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="textViewNumberPast" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.09090909" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
