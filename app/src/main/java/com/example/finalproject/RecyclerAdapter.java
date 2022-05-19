@@ -45,6 +45,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 System.out.println(id);
                 addToUserList(name, description, id, price);
             });
+
+            itemView.findViewById(R.id.buttonMinus).setOnClickListener(v -> {
+                id = Integer.parseInt(idTxt.getText().toString());
+
+                removeFromUserList(id);
+            });
+        }
+    }
+
+    private void removeFromUserList(int id) {
+        int amount;
+        boolean found = false;
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getId() == id) {
+                userList.get(i).setAmount(userList.get(i).getAmount() - 1);
+                if (userList.get(i).getAmount() <= 0) {
+                    userList.remove(i);
+                }
+            }
         }
     }
 
