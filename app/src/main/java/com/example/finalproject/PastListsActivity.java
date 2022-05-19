@@ -35,10 +35,10 @@ public class PastListsActivity extends AppCompatActivity {
     }
 
     private void setProductInfo() {
-        pastProductsList.add(new Product("banana"));
-        pastProductsList.add(new Product("apple"));
-        pastProductsList.add(new Product("nuts"));
-        pastProductsList.add(new Product("ketchup"));
-        pastProductsList.add(new Product("mayo"));
+//        pastProductsList.add(new Product("banana", description, id, price));
+//        pastProductsList.add(new Product("apple", description, id, price));
+//        pastProductsList.add(new Product("nuts", description, id, price));
+//        pastProductsList.add(new Product("ketchup", description, id, price));
+//        pastProductsList.add(new Product("mayo", description, id, price));
     }
 }

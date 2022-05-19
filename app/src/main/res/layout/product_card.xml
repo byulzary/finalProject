@@ -3,7 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="220dp">
+    android:layout_height="220dp"
+    android:layout_marginLeft="@dimen/activity_vertical_margin"
+    android:layout_marginRight="@dimen/activity_vertical_margin"
+    android:layout_marginTop="2dip"
+    android:layout_marginBottom="2dip"
+    android:background="@drawable/viewbg"
+
+    >
 
     <TextView
         android:id="@+id/textViewName"
@@ -56,16 +63,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonAddProduct" />
 
-    <TextView
-        android:id="@+id/textViewNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:text="#"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonMinus"
-        app:layout_constraintEnd_toStartOf="@+id/buttonAddProduct"
-        app:layout_constraintTop_toTopOf="@+id/buttonAddProduct" />
-
     <Button
         android:id="@+id/buttonMinus"
         android:layout_width="40dp"
@@ -90,8 +87,7 @@
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="textViewNumber" />
+        android:layout_height="wrap_content" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -99,5 +95,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.09090909" />
+
+    <TextView
+        android:id="@+id/textViewIdUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
