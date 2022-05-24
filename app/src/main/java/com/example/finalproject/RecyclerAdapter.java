@@ -15,6 +15,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     private ArrayList<Product> productList;
     public static ArrayList<UserProduct> userList = new ArrayList<>();
+    int count = 0;
 
     public RecyclerAdapter(ArrayList<Product> productList) {
         this.productList = productList;
@@ -55,7 +56,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     }
 
     private void removeFromUserList(int id) {
-        int amount;
         boolean found = false;
         for (int i = 0; i < userList.size(); i++) {
             if (userList.get(i).getId() == id) {

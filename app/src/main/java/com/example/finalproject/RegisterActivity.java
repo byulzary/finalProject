@@ -20,13 +20,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class RegisterActivity extends AppCompatActivity {
     Connection connection;
     private Button registerButton;
     TextView status;
-    EditText email, password, verPass, name, id, phone, address;
+    EditText email, password, verPass, name, phone, address;
+    //EditText  id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,20 +40,39 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.buttonFinishReg);
         status = findViewById(R.id.statusTextView);
         name = (EditText) findViewById(R.id.editTextRegName);
-        id = (EditText) findViewById(R.id.editIDReg);
+        //id = (EditText) findViewById(R.id.editIDReg);
         phone = (EditText) findViewById(R.id.editTextPhone);
         address = (EditText) findViewById(R.id.editTextRegAddress);
+        String statementCount = "select * from users";
+        int count = 0;
 
+        ConSQL c = new ConSQL();
+        connection = c.conclass();
+        try {
+            Statement countStmt = connection.createStatement();
+            ResultSet rs = countStmt.executeQuery(statementCount);
+            while (rs.next()) {
+                count++;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+//        ConSQL c = new ConSQL();
+//        connection = c.conclass();
+        int finalCount = count;
         registerButton.setOnClickListener(v -> {
-            ConSQL c = new ConSQL();
-            connection = c.conclass();
+
             try {
-                int myId = Integer.parseInt(id.getText().toString());
+                //int myId = Integer.parseInt(id.getText().toString());
+                int myId = finalCount + 1;
                 String myname = name.getText().toString();
                 String myemail = email.getText().toString();
                 String myphone = phone.getText().toString();
                 String mypassword = password.getText().toString();
                 String myaddress = address.getText().toString();
+                String mypasswordVerify = verPass.getText().toString();
+                int tryRegister = tryRegister(myemail, password, mypasswordVerify);
                 String statement = "insert into users(userID," +
                         " name," +
                         " phone, " +
@@ -61,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
                         ")" +
                         " values " +
                         "(?,?,?,?,?,?)";
-                //String statement = "Select * from users";
+
                 PreparedStatement stmt = connection.prepareStatement(statement);
                 stmt.setInt(1, myId);
                 stmt.setString(2, myname);
@@ -80,5 +101,10 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.e("error: ", e.getMessage(), e);
             }
         });
+    }
+
+    private int tryRegister(String myemail, EditText password, String mypasswordVerify) {
+
+        return 1;
     }
 }

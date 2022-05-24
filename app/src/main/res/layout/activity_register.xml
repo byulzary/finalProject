@@ -82,24 +82,12 @@
         android:id="@+id/editTextRegName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:ems="10"
         android:hint="name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="@+id/editTextPhone"
         app:layout_constraintStart_toStartOf="@+id/editTextPhone"
-        app:layout_constraintTop_toBottomOf="@+id/editIDReg" />
-
-    <EditText
-        android:id="@+id/editIDReg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="id"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="@+id/editTextRegName"
-        app:layout_constraintStart_toStartOf="@+id/editTextRegName"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText

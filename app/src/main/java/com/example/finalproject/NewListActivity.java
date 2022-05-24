@@ -1,13 +1,18 @@
 package com.example.finalproject;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,10 +28,18 @@ public class NewListActivity extends AppCompatActivity {
     public ArrayList<UserProduct> userList = new ArrayList<>();
     private RecyclerView recyclerView;
     public Button saveBtn;
+    Bundle bundle;
+    private int uid;
+    String listName = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bundle = getIntent().getExtras();
+
+        uid = bundle.getInt("uid");
+        System.out.println(uid + "|uid new list");
         setContentView(R.layout.activity_new_list);
         productsList = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerViewProducts);
@@ -40,26 +53,204 @@ public class NewListActivity extends AppCompatActivity {
             throwables.printStackTrace();
         }
         setAdapter();
+        AlertDialog.Builder builder = new AlertDialog.Builder(NewListActivity.this);
         findViewById(R.id.saveListButton).setOnClickListener(v -> {
-            try {
-                saveListToDb(connection);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+            builder.setTitle("Input List Name");
+            final EditText input = new EditText(NewListActivity.this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+            builder.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    listName = input.getText().toString();
+                    try {
+                        saveListToDb(connection, listName);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+
+            builder.setTitle("Navigation");
+            builder.setMessage("Do you wish to navigate now?");
+            builder.setPositiveButton("Navigate", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
         });
     }
 
-    private void saveListToDb(Connection connection) throws SQLException {
-        for (int i = 0; i < RecyclerAdapter.userList.size(); i++) {
-            String query =
-                    "insert into user_list_items(id, list_id, item_id) values('1'," + "'1'," +
-                            RecyclerAdapter.userList.get(0).getId() +
-                            ")";
-            System.out.println(RecyclerAdapter.userList.get(i).getId() + "|" + RecyclerAdapter.userList.get(i).getAmount());
-            Statement st = connection.createStatement();
-            st.executeUpdate(query);
+    private void saveListToDb(Connection connection, String listName) throws SQLException {
 
+
+        //count user_lists
+        int userListsCount = 0;
+        String query = "select * from user_lists";
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        while (rs.next()) {
+            userListsCount++;
         }
+        System.out.println("user_lists count: " + userListsCount);
+        userListsCount++;
+        //insert into user_lists
+        query = "insert into user_lists(list_id," +
+                " name)"
+                + " values" +
+                "(?,?)";
+        PreparedStatement pstmt = connection.prepareStatement(query);
+        pstmt.setInt(1, userListsCount);
+        pstmt.setString(2, listName);
+        pstmt.executeUpdate();
+
+
+//                query =
+//                "insert into user_lists" +
+//                        "(list_id,name) values" +
+//                        "('"
+//                        +userListsCount
+//                        +
+//                        "','"
+//                        +listName
+//                        +"')'";
+//        PreparedStatement preparedStatement=connection.prepareStatement(query);
+//        preparedStatement.executeUpdate();
+//
+//        Statement st= connection.createStatement();
+//       // st.executeUpdate(query);
+
+
+        //count user_lists_rel
+        int userListRelCount = 0;
+        query = "select * from user_lists_rel where user_id=" + uid;
+        stmt = connection.createStatement();
+        rs = stmt.executeQuery(query);
+        while (rs.next()) {
+            userListRelCount++;
+        }
+        System.out.println("user_lists_rel count: " + userListRelCount);
+        userListRelCount++;
+
+        //insert into user_lists_rel
+        query = "insert into user_lists_rel(id, user_id, list_id) values (?,?,?)";
+        PreparedStatement pStmt = connection.prepareStatement(query);
+        pStmt.setInt(1, userListRelCount);
+        pStmt.setInt(2, uid);
+        pStmt.setInt(3, userListsCount);
+        pStmt.executeUpdate();
+
+        //count user_list_items
+        int userListItemCount = 0;
+        query = "select * from user_list_items";
+        stmt = connection.createStatement();
+        rs = stmt.executeQuery(query);
+        while (rs.next()) {
+            userListItemCount++;
+        }
+        userListItemCount++;
+        //insert into user_list_items
+        for (int i = 0; i < RecyclerAdapter.userList.size(); i++) {
+
+            query =
+                    "insert into user_list_items(id, list_id, item_id, amount) values(" + userListItemCount +
+                            "," + userListsCount + "," +
+                            RecyclerAdapter.userList.get(i).getId() + "," + RecyclerAdapter.userList.get(i).getAmount() +
+                            ")";
+            //System.out.println(RecyclerAdapter.userList.get(i).getId() + "|" +
+            // RecyclerAdapter.userList.get(i).getAmount());
+            Statement st;
+            st = connection.createStatement();
+            st.executeUpdate(query);
+            userListItemCount++;
+        }
+
+
+//        //insert into user_list_items
+//        query="insert into user_list_items(id, list_id, item_id) values (?,?,?)";
+//        pStmt = connection.prepareStatement(query);
+//        pStmt.setInt(1, userListItemCount);
+//        pStmt.setInt(2, uid);
+//        pStmt.setInt(3, userListsCount);
+//        pStmt.executeUpdate();
+
+//
+//
+//        //inser into user_lists_rel
+//        query="insert into user_lists_rel(id, user_id, list_id) values (?,?,?)";
+//        PreparedStatement pStmt = connection.prepareStatement(query);
+//        pStmt.setInt(1, count);
+//        pStmt.setInt(2, uid);
+//        pStmt.setInt(3, count);
+//        //  ResultSet set = stmt.executeUpdate(statement);
+//        pStmt.executeUpdate();
+//
+//        //count user_lists
+//        int countUserLists=0;
+//        query="select * from user_lists";
+
+
+//        int numOfLists=0;
+//        //insert into user_lists
+//        String queryUserLists=
+//                "insert into user_lists(list_id,name) values("+numOfLists+","+"'test')";
+//        Statement st= connection.createStatement();
+//        st.executeUpdate(queryUserLists);
+//        //count rows for user_lists_rel
+//        int ULRCount=0;
+//        String queryCount = "select * from user_lists_rel where user_id=" + uid;
+//        Statement countStmt = connection.createStatement();
+//        ResultSet rs = countStmt.executeQuery(queryCount);
+//        while(rs.next()){
+//            ULRCount++;
+//        }
+//        queryCount="select * from user_lists_rel where user_id="+uid;
+//
+//        countStmt=connection.createStatement();
+//        rs = countStmt.executeQuery(queryCount);
+//        while(rs.next()){
+//            numOfLists++;
+//        }
+//        numOfLists++;
+//        System.out.println("number of lists for user: "+numOfLists);
+//
+//
+//
+//        System.out.println("UID: "+uid+", ULRCount: "+ULRCount);
+
+//        for (int i = 0; i < RecyclerAdapter.userList.size(); i++) {
+//
+//
+//
+//            //insert into user_lists_rel
+//
+//
+//
+//
+//
+////            String query =
+////                    "insert into user_list_items(id, list_id, item_id) values('1'," + "'1'," +
+////                            RecyclerAdapter.userList.get(0).getId() +
+////                            ")";
+////            System.out.println(RecyclerAdapter.userList.get(i).getId() + "|" + RecyclerAdapter.userList.get(i).getAmount());
+////            Statement st = connection.createStatement();
+////            st.executeUpdate(query);
+//
+//        }
     }
 
     private void setAdapter() {
@@ -82,6 +273,8 @@ public class NewListActivity extends AppCompatActivity {
             float pPrice = rs.getFloat("price");
             Product p = new Product(pName, pDesc, pID, pPrice);
             productsList.add(p);
+
         }
+
     }
 }
