@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.nio.channels.InterruptedByTimeoutException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,6 +32,7 @@ public class NewListActivity extends AppCompatActivity {
     Bundle bundle;
     private int uid;
     String listName = "";
+    int choice = 0;
 
 
     @Override
@@ -54,7 +56,25 @@ public class NewListActivity extends AppCompatActivity {
         }
         setAdapter();
         AlertDialog.Builder builder = new AlertDialog.Builder(NewListActivity.this);
+        AlertDialog.Builder builderAlgo = new AlertDialog.Builder(NewListActivity.this);
+
         findViewById(R.id.saveListButton).setOnClickListener(v -> {
+
+            builderAlgo.setTitle("Navigation");
+            builderAlgo.setMessage("Do you wish to navigate now?");
+            builderAlgo.setPositiveButton("Navigate", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    sendToAlgo();
+                }
+            });
+            builderAlgo.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builderAlgo.show();
             builder.setTitle("Input List Name");
             final EditText input = new EditText(NewListActivity.this);
             input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -78,21 +98,16 @@ public class NewListActivity extends AppCompatActivity {
             });
             builder.show();
 
-            builder.setTitle("Navigation");
-            builder.setMessage("Do you wish to navigate now?");
-            builder.setPositiveButton("Navigate", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
 
-                }
-            });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
         });
+
+        System.out.println("choice: " + choice);
+    }
+
+    private void sendToAlgo() {
+
+        Intent intent = new Intent(this, AlgoActivity.class);
+        startActivity(intent);
     }
 
     private void saveListToDb(Connection connection, String listName) throws SQLException {

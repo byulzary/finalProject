@@ -30,6 +30,7 @@ public class PastItemRecyclerAdapter extends RecyclerView.Adapter<PastItemRecycl
             nameTxt = view.findViewById(R.id.textViewNamePast);
             descTxt = view.findViewById(R.id.textViewDescriptionPast);
             amountTxt = view.findViewById(R.id.textViewNumberPast);
+
         }
     }
 

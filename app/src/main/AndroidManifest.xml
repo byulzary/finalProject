@@ -31,6 +31,12 @@
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
+            android:name=".ItemsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AlgoActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

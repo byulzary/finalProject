@@ -1,5 +1,6 @@
 package com.example.finalproject;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 public class PastRecyclerAdapter extends RecyclerView.Adapter<PastRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<PastLists> pastLists;
+    public Intent intent;
 
     public PastRecyclerAdapter(ArrayList<PastLists> pastLists) {
         this.pastLists = pastLists;
@@ -25,17 +27,13 @@ public class PastRecyclerAdapter extends RecyclerView.Adapter<PastRecyclerAdapte
         private TextView amountTxt;
         private Button viewListBtn;
 
-        public MyViewHolder(final View view) {
+
+        public MyViewHolder(View view) {
             super(view);
             nameTxt = view.findViewById(R.id.plTextViewName);
             amountTxt = view.findViewById(R.id.plId);
-            itemView.findViewById(R.id.buttonViewPastList).setOnClickListener(V -> {
-                watchList();
-            });
+            viewListBtn = view.findViewById(R.id.buttonViewPastList);
         }
-    }
-
-    private void watchList() {
     }
 
     @NonNull
@@ -52,6 +50,12 @@ public class PastRecyclerAdapter extends RecyclerView.Adapter<PastRecyclerAdapte
         String sAmount = Integer.toString(amount);
         holder.nameTxt.setText(name);
         holder.amountTxt.setText(sAmount);
+        holder.viewListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent=new Intent(this, ItemsActivity.class);
+            }
+        });
     }
 
     @Override
