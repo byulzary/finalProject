@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import java.sql.Connection;
@@ -57,7 +58,19 @@ public class PastListsActivity extends AppCompatActivity {
     }
 
     private void setAdapter() {
-        PastRecyclerAdapter adatper = new PastRecyclerAdapter(pastLists);
+        PastRecyclerAdapter adatper = new PastRecyclerAdapter(pastLists,
+                new ItemListClickListener() {
+                    @Override
+                    public void onViewItemListClick(int listId) {
+                        Bundle bundleListId = new Bundle();
+                        bundleListId.putInt("listid", listId);
+
+                        Intent intent = new Intent(PastListsActivity.this,
+                                ItemsActivity.class);
+                        intent.putExtras(bundleListId);
+                        startActivity(intent);
+                    }
+                });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerViewPast.setLayoutManager(layoutManager);
         recyclerViewPast.setItemAnimator(new DefaultItemAnimator());

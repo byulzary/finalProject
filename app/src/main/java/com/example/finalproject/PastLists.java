@@ -3,19 +3,19 @@ package com.example.finalproject;
 public class PastLists {
 
     private String name;
-    private int amount;
+    private int id;
 
-    public PastLists(String name, int amount) {
+    public PastLists(String name, int id) {
         this.name = name;
-        this.amount = amount;
+        this.id = id;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getId() {
+        return id;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

@@ -1,7 +1,5 @@
 package com.example.finalproject;
 
-import android.content.ClipData;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,23 +13,25 @@ import java.util.ArrayList;
 
 public class PastRecyclerAdapter extends RecyclerView.Adapter<PastRecyclerAdapter.MyViewHolder> {
 
+    private final ItemListClickListener itemClickListener;
     private ArrayList<PastLists> pastLists;
-    public Intent intent;
 
-    public PastRecyclerAdapter(ArrayList<PastLists> pastLists) {
+    public PastRecyclerAdapter(ArrayList<PastLists> pastLists, ItemListClickListener itemListClickListener) {
         this.pastLists = pastLists;
+
+        this.itemClickListener = itemListClickListener;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView nameTxt;
-        private TextView amountTxt;
+        private TextView idTxt;
         private Button viewListBtn;
 
 
         public MyViewHolder(View view) {
             super(view);
             nameTxt = view.findViewById(R.id.plTextViewName);
-            amountTxt = view.findViewById(R.id.plId);
+            idTxt = view.findViewById(R.id.plId);
             viewListBtn = view.findViewById(R.id.buttonViewPastList);
         }
     }
@@ -46,14 +46,14 @@ public class PastRecyclerAdapter extends RecyclerView.Adapter<PastRecyclerAdapte
     @Override
     public void onBindViewHolder(@NonNull PastRecyclerAdapter.MyViewHolder holder, int position) {
         String name = pastLists.get(position).getName();
-        int amount = pastLists.get(position).getAmount();
-        String sAmount = Integer.toString(amount);
+        int id = pastLists.get(position).getId();
+        String sid = Integer.toString(id);
         holder.nameTxt.setText(name);
-        holder.amountTxt.setText(sAmount);
+        holder.idTxt.setText(sid);
         holder.viewListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent=new Intent(this, ItemsActivity.class);
+                itemClickListener.onViewItemListClick(id);
             }
         });
     }

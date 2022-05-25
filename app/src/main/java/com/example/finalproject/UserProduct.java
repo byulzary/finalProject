@@ -14,7 +14,7 @@ public class UserProduct {
         this.description = description;
         this.id = id;
         this.price = price;
-        this.amount = 0;
+        this.amount = amount;
     }
 
     public int getAmount() {

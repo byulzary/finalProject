@@ -17,7 +17,7 @@ public class PastItemRecyclerAdapter extends RecyclerView.Adapter<PastItemRecycl
     private ArrayList<UserProduct> pastProductList;
 
     public PastItemRecyclerAdapter(ArrayList<UserProduct> pastLists) {
-        this.pastProductList = pastProductList;
+        this.pastProductList = pastLists;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -37,7 +37,8 @@ public class PastItemRecyclerAdapter extends RecyclerView.Adapter<PastItemRecycl
     @NonNull
     @Override
     public PastItemRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.past_list_card, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.past_product_card,
+                parent, false);
         return new MyViewHolder(itemView);
     }
 
