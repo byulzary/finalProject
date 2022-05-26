@@ -33,13 +33,13 @@ public class NewListActivity extends AppCompatActivity {
     private int uid;
     String listName = "";
     int choice = 0;
+    int listId;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bundle = getIntent().getExtras();
-
         uid = bundle.getInt("uid");
         System.out.println(uid + "|uid new list");
         setContentView(R.layout.activity_new_list);
@@ -65,7 +65,7 @@ public class NewListActivity extends AppCompatActivity {
             builderAlgo.setPositiveButton("Navigate", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    sendToAlgo();
+                    sendToAlgo(listId);
                 }
             });
             builderAlgo.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -84,7 +84,7 @@ public class NewListActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     listName = input.getText().toString();
                     try {
-                        saveListToDb(connection, listName);
+                        listId = saveListToDb(connection, listName);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
@@ -104,13 +104,15 @@ public class NewListActivity extends AppCompatActivity {
         System.out.println("choice: " + choice);
     }
 
-    private void sendToAlgo() {
-
+    private void sendToAlgo(int listId) {
+        Bundle bundleListId = new Bundle();
+        bundleListId.putInt("listId", listId);
         Intent intent = new Intent(this, AlgoActivity.class);
+        intent.putExtras(bundleListId);
         startActivity(intent);
     }
 
-    private void saveListToDb(Connection connection, String listName) throws SQLException {
+    private int saveListToDb(Connection connection, String listName) throws SQLException {
 
 
         //count user_lists
@@ -266,6 +268,7 @@ public class NewListActivity extends AppCompatActivity {
 ////            st.executeUpdate(query);
 //
 //        }
+        return userListsCount;
     }
 
     private void setAdapter() {

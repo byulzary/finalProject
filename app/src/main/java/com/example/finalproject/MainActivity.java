@@ -27,8 +27,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         loginButton = findViewById(R.layout.activity_menu);
         registerButton = findViewById(R.layout.activity_register);
         emailLogin = findViewById(R.id.editEmail);
