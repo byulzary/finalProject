@@ -47,9 +47,9 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
             case R.id.settingsButton:
-                intent = new Intent(this, AlgoActivity.class);
-//                bundle.putInt("uid", uid);
-//                intent.putExtras(bundle);
+                intent = new Intent(this, SettingsActivity.class);
+                bundle.putInt("uid", uid);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
 //                startActivity(new Intent(this, SettingsActivity.class));
