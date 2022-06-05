@@ -5,12 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
+
+import org.xguzm.pathfinding.grid.NavigationGrid;
+import org.xguzm.pathfinding.grid.finders.AStarGridFinder;
+import org.xguzm.pathfinding.grid.finders.GridFinderOptions;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class AlgoActivity extends AppCompatActivity {
@@ -35,12 +36,10 @@ public class AlgoActivity extends AppCompatActivity {
     RecyclerView gridRv;
     SupermarketMapAdapter rvAdapter;
     //    String[] number = new String[100];
-    private List<Cell> cells = new ArrayList<>(GRID_SIZE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         naviProducts = new ArrayList<>();
-        cells = new ArrayList<>();
         bundle = new Bundle();
         bundle = getIntent().getExtras();
         listId = 0;//TODO: bundle.getInt("listId");
@@ -50,8 +49,9 @@ public class AlgoActivity extends AppCompatActivity {
         findViewById(R.id.stamBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Cell> cells = getCells(randomCells());
-                rvAdapter.setMatrix(cells);
+                List<Cell> cells = parseMap(randomCells());
+                Matrix matrix = new Matrix(10, cells);
+                rvAdapter.setMatrix(matrix);
             }
 
             private String randomCells() {
@@ -71,30 +71,21 @@ public class AlgoActivity extends AppCompatActivity {
         });
 
 
-//        for (int i=0;i<number.length;i++){
-//            number[i]=String.valueOf(i);
-//        }
-        Random rand = new Random();
-
-        Cell[] values = Cell.values();
-        for (int i = 0; i < GRID_SIZE; i++) {
-            cells.add(values[rand.nextInt(values.length)]);
-        }
-
 //        gridView = findViewById(R.id.gridViewAlgo);
         gridRv = findViewById(R.id.gridViewAlgo);
 
-        ConSQL c = new ConSQL();
-        connection = c.conclass();
-        try {
-            createProductArray(naviProducts, connection);
-//            createBarrierArray(barriers, connection);
-//            for (int i = 0; i < barriers.size(); i++) {
-//                isBarrier.add(barriers.get(i).getIsBarrier());
-//            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        // TODO: 05/06/2022 restore
+//        ConSQL c = new ConSQL();
+//        connection = c.conclass();
+//        try {
+//            createProductArray(naviProducts, connection);
+////            createBarrierArray(barriers, connection);
+////            for (int i = 0; i < barriers.size(); i++) {
+////                isBarrier.add(barriers.get(i).getIsBarrier());
+////            }
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
         System.out.println("isBarrier list:");
 
 //        for (int i = 0; i < isBarrier.size(); i++) {
@@ -144,12 +135,12 @@ public class AlgoActivity extends AppCompatActivity {
 //            }
 //        });
 
-        String fromDb = "" +
+        String mapWithBarriesItems = "" +
                 "NNNNNNNNNN" +
-                "NNNNNNNNNN" +
-                "NNNNNNNNNN" +
-                "NNNNNNNNNN" +
-                "NNNNNNNNNN" +
+                "NNbNNNNNNN" +
+                "NNbNNNNNNN" +
+                "NNbNNNNNNN" +
+                "NNbNNNNNNN" +
                 "NNbNNNNNNN" +
                 "NNbNNNNNNN" +
                 "NNbNNNNNNN" +
@@ -159,9 +150,45 @@ public class AlgoActivity extends AppCompatActivity {
         int nColumns = 10;
         gridRv.setLayoutManager(new GridLayoutManager(this, GRID_SIZE / nColumns));
 
-        List<Cell> cells = getCells(fromDb);
+        List<Cell> cells = parseMap(mapWithBarriesItems);
 
-        rvAdapter = new SupermarketMapAdapter(cells, nColumns);
+        Matrix m = new Matrix(10, cells);
+
+//        Cell[][] zells = new Cell[10][10];
+//        for (int i = 0; i < 10; i++) {
+//            for (int j = 0; j < 10; j++) {
+//                char symbol = mapWithBarriesItems.charAt(i * 10 + j);
+//                zells[i][j] = new Cell(Cell.Type.fromSymbol(symbol));
+//            }
+//        }
+
+        int startX = 0;
+        int startY = 0;
+
+        int nextItemX = 9;
+        int nextItemY = 9;
+        char symbol = 'I';
+        m.get(nextItemX, nextItemY).setType(Cell.Type.fromSymbol(symbol));
+
+        NavigationGrid<Cell> grid = new NavigationGrid<>(m.asMatrix(), true);
+
+        GridFinderOptions options = new GridFinderOptions();
+        options.allowDiagonal = true;
+
+        AStarGridFinder<Cell> finder = new AStarGridFinder<>(Cell.class, options);
+
+        List<Cell> path = finder.findPath(startX, startY, nextItemX, nextItemY, grid);
+
+        String pathStr = path.stream().map(c -> "(" + c.x + "," + c.y + ")")
+                .reduce((a, b) -> a + ", " + b).get();
+
+        System.out.println("Path:" + pathStr);
+//                .collect(Collectors.toList());
+//        int r = rand.nextInt(10);
+//        int c = rand.nextInt(10);
+//        m.set(r,c, );
+
+        rvAdapter = new SupermarketMapAdapter(m, nColumns);
         gridRv.setItemAnimator(null);
 
         gridRv.setAdapter(rvAdapter);
@@ -176,13 +203,17 @@ public class AlgoActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private List<Cell> getCells(String fromDb) {
-        List<String> symbols = Arrays.asList(fromDb.split(""));
+    private List<Cell> parseMap(String fromDb) {
+        List<Character> split = Arrays.stream(fromDb.split("")).map(a -> a.charAt(0)).collect(Collectors.toList());
+//        List<String> symbols = Arrays.asList(split);
 
-        List<Cell> cells = symbols
+        List<Cell> cells = split
                 .stream()
-                .map(Cell::fromSymbol)
+                .map(Cell.Type::fromSymbol)
+                .map(Cell::new)
                 .collect(Collectors.toList());
+
+
         return cells;
     }
 

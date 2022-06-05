@@ -25,13 +25,13 @@ public class SupermarketMapAdapter extends RecyclerView.Adapter<CellViewHolder> 
 
     private int columns;
 
-    public SupermarketMapAdapter(List<Cell> matrix, int columns) {
+    public SupermarketMapAdapter(Matrix matrix, int columns) {
         this.columns = columns;
         setMatrix(matrix);
     }
 
-    public void setMatrix(List<Cell> matrix) {
-        mDiffer.submitList(matrix);
+    public void setMatrix(Matrix matrix) {
+        mDiffer.submitList(matrix.asList());
     }
 
     @NonNull

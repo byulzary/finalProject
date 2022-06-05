@@ -56,33 +56,59 @@ package com.example.finalproject;
 
 import android.graphics.Color;
 
-enum Cell {
-    None,
-    Path,
-    Item,
-    Barrier;
+import org.xguzm.pathfinding.grid.GridCell;
 
-    public int getColor() {
+class Cell extends GridCell {
+
+    private Type type;
+
+    public Cell(Type type) {
+        this.type = type;
+    }
+
+    @Override
+    public boolean isWalkable() {
+        return this.type != Type.Barrier;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    enum Type {
+        None,
+        Path,
+        Item,
+        Barrier;
+
+        public int getColor () {
         switch (this) {
             case Path:
                 return Color.RED;
             case Barrier:
                 return Color.BLACK;
+            case Item:
+                return Color.GREEN;
             default:
                 return Color.WHITE;
         }
     }
 
-    public static Cell fromSymbol(String symbol) {
-        switch (symbol.toUpperCase()) {
-            case "B":
+        public static Type fromSymbol (Character symbol){
+        switch (Character.toUpperCase(symbol)) {
+            case 'B':
                 return Barrier;
-            case "P":
+            case 'P':
                 return Path;
-            case "I":
+            case 'I':
                 return Item;
             default:
                 return None;
         }
+    }
     }
 }

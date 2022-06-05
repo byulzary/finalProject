@@ -14,6 +14,6 @@ public class CellViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setCell(Cell cell) {
-        this.view.setBackgroundColor(cell.getColor());
+        this.view.setBackgroundColor(cell.getType().getColor());
     }
 }
