@@ -58,8 +58,11 @@ import android.graphics.Color;
 
 import org.xguzm.pathfinding.grid.GridCell;
 
+import java.util.Objects;
+
 class Cell extends GridCell {
 
+    private UserProduct item;
     private Type type;
 
     public Cell(Type type) {
@@ -79,11 +82,25 @@ class Cell extends GridCell {
         this.type = type;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cell cell = (Cell) o;
+        return Objects.equals(item, cell.item) && type == cell.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(item, type);
+    }
+
     enum Type {
         None,
         Path,
         Item,
-        Barrier;
+        Barrier,
+        Start;
 
         public int getColor () {
         switch (this) {
@@ -93,6 +110,8 @@ class Cell extends GridCell {
                 return Color.BLACK;
             case Item:
                 return Color.GREEN;
+            case Start:
+                return Color.MAGENTA;
             default:
                 return Color.WHITE;
         }

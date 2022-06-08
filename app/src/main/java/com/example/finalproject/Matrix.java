@@ -13,7 +13,6 @@ public class Matrix {
     public Matrix(int rows) {
         this.rows = rows;
         this.elements = new Cell[rows][rows];
-
     }
 
     public Matrix(int r, List<Cell> elements) {
@@ -53,7 +52,7 @@ public class Matrix {
                 .collect(Collectors.toList());
     }
 
-    public Cell[][] asMatrix() {
+    public Cell[][] asNativeMatrix() {
         return elements;
     }
 }

@@ -17,14 +17,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gridViewAlgo"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="310dp"
+        android:layout_height="310dp"
+        android:background="@drawable/viewbg"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/viewbg" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:layout_width="wrap_content"

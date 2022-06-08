@@ -23,7 +23,7 @@ public class SupermarketMapAdapter extends RecyclerView.Adapter<CellViewHolder> 
         }
     });
 
-    private int columns;
+    private final int columns;
 
     public SupermarketMapAdapter(Matrix matrix, int columns) {
         this.columns = columns;
