@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 
 import org.xguzm.pathfinding.grid.NavigationGrid;
@@ -13,7 +14,10 @@ import org.xguzm.pathfinding.grid.finders.AStarGridFinder;
 import org.xguzm.pathfinding.grid.finders.GridFinderOptions;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,18 +38,25 @@ public class AlgoActivity extends AppCompatActivity {
     private List<Cell> startMap;
     private List<Cell> path;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ConSQL c = new ConSQL();
+        connection = c.conclass();
+        bundle = new Bundle();
+        bundle = getIntent().getExtras();
+        listId = bundle.getInt("listId");
+        naviProducts = new ArrayList<>();
+        System.out.println("listId:" + listId);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         try {
-            naviProducts = createProductArray(null, null);
+            naviProducts = createProductArray(naviProducts, connection);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        bundle = new Bundle();
-        bundle = getIntent().getExtras();
-        listId = 0;//TODO: bundle.getInt("listId");
-        System.out.println("listId:" + listId);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_algo);
 
@@ -85,8 +96,13 @@ public class AlgoActivity extends AppCompatActivity {
         gridRv = findViewById(R.id.gridViewAlgo);
 
         // TODO: 05/06/2022 restore
-//        ConSQL c = new ConSQL();
-//        connection = c.conclass();
+//
+//        try {
+//            createProductArray(naviProducts,connection);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        createProductArray(naviProducts,connection);
 //        try {
 //            createProductArray(naviProducts, connection);
 ////            createBarrierArray(barriers, connection);
@@ -189,35 +205,42 @@ public class AlgoActivity extends AppCompatActivity {
         return cells;
     }
 
-    private List<NaviProduct> createProductArray(ArrayList<NaviProduct> naviProducts, Connection connection) throws SQLException {
-        List<NaviProduct> s = new ArrayList<>();
-        s.add(new NaviProduct("", 0, 0, 0, 0, 0));
-        s.add(new NaviProduct("", 0, 5, 0, 0, 0));
-        s.add(new NaviProduct("", 5, 3, 0, 0, 0));
-        s.add(new NaviProduct("", 9, 9, 0, 0, 0));
-        return s;
-//        String query = " select item_id, name, amount, " +
-//                "loc_x, loc_y,loc_z, itemDesc " +
-//                "from user_list_items join items" +
-//                " on user_list_items.item_id=items.itemID" +
-//                " where list_id='39'";
-//        Statement stmt = connection.createStatement();
-//        ResultSet rs = stmt.executeQuery(query);
-//        while (rs.next()) {
-//            String name = rs.getString("name");
-//            int loc_x = rs.getInt("loc_x");
-//            int loc_y = rs.getInt("loc_y");
-//            int loc_z = rs.getInt("loc_z");
-//            int amount = rs.getInt("amount");
-//            int id = rs.getInt("item_id");
-//            NaviProduct np = new NaviProduct(name, loc_x, loc_y, loc_z, id,
-//                    amount);
-//            naviProducts.add(np);
-//        }
-//        System.out.println("Products:");
-//        for (int i = 0; i < naviProducts.size(); i++) {
-//            System.out.println(naviProducts.get(i).id);
-//        }
+    private List<NaviProduct> createProductArray(List<NaviProduct> naviProducts,
+                                                 Connection connection) throws SQLException {
+//        List<NaviProduct> s = new ArrayList<>();
+//        s.add(new NaviProduct("", 0, 0, 0, 0, 0));
+//        s.add(new NaviProduct("", 0, 5, 0, 0, 0));
+//        s.add(new NaviProduct("", 5, 3, 0, 0, 0));
+//        s.add(new NaviProduct("", 9, 9, 0, 0, 0));
+//       // return s;
+        String query = " select item_id, name, amount, " +
+                "loc_x, loc_y,loc_z, itemDesc " +
+                "from user_list_items join items" +
+                " on user_list_items.item_id=items.itemID" +
+                " where list_id=" + listId;
+
+        Statement stmt = connection.createStatement();
+//        PreparedStatement stmt = connection.prepareStatement(query);
+//        stmt.setInt(1, listId);
+        int index = 0;
+        ResultSet rs = stmt.executeQuery(query);
+        while (rs.next()) {
+            String name = rs.getString("name");
+            int loc_x = rs.getInt("loc_x");
+            int loc_y = rs.getInt("loc_y");
+            int loc_z = rs.getInt("loc_z");
+            int amount = rs.getInt("amount");
+            int id = rs.getInt("item_id");
+            NaviProduct np = new NaviProduct(name, loc_x, loc_y, loc_z, id,
+                    amount);
+            naviProducts.add(index, np);
+            index++;
+        }
+        System.out.println("Products:");
+        for (int i = 0; i < naviProducts.size(); i++) {
+            System.out.println(naviProducts.get(i).id);
+        }
+        return naviProducts;
     }
 
     private void createBarrierArray(ArrayList<Cell> cells,
