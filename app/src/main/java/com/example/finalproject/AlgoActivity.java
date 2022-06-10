@@ -19,6 +19,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,7 +69,7 @@ public class AlgoActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        System.out.println(dbMap);
+//        System.out.println(dbMap);
 
 //        String dbSupermarketMap = "" +
 //                "NbNNbNNNbN" +
@@ -85,7 +87,7 @@ public class AlgoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 numOfCollectedItems++;
-                if (numOfCollectedItems <= naviProducts.size()) {
+                if (numOfCollectedItems < naviProducts.size()) {
 
 
                     Matrix matrix = new Matrix(10, parseMap(dbMap));
@@ -139,6 +141,10 @@ public class AlgoActivity extends AppCompatActivity {
         int startX = 9;
         int startY = 5;
 
+
+        //sort before first item calculation
+        sortItemsList(startX, startY, naviProducts);
+
         NaviProduct firstItem = naviProducts.get(0);
         int nextItemX = firstItem.loc_x;
         int nextItemY = firstItem.loc_y;
@@ -168,6 +174,27 @@ public class AlgoActivity extends AppCompatActivity {
 //            }
 //
 //        }
+    }
+
+    private void sortItemsList(int startX, int startY, List<NaviProduct> naviProducts) {
+        Collections.sort(naviProducts, new Comparator<NaviProduct>() {
+            @Override
+            public int compare(NaviProduct o1, NaviProduct o2) {
+                double aerialDistance1, aerialDistance2;
+                double toRoot1, toRoot2;
+                toRoot1 =
+                        (o1.loc_x - startX) * (o1.loc_x - startX) + (o1.loc_y - startY) * (o1.loc_y - startY);
+                toRoot2 =
+                        (o2.loc_x - startX) * (o2.loc_x - startX) + (o2.loc_y - startY) * (o2.loc_y - startY);
+
+                aerialDistance1 = Math.sqrt(toRoot1);
+                aerialDistance2 = Math.sqrt(toRoot1);
+
+                if (aerialDistance1 - aerialDistance2 > 0)
+                    return -1;
+                return 1;
+            }
+        });
     }
 
     private String getMapFromDB(Connection connection) throws SQLException {
