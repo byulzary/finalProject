@@ -17,7 +17,7 @@ public class ConSQL {
 
     @SuppressLint("NewApi")
     public Connection conclass() {
-        String ip = "10.100.102.39", port = "1433", db = "AndroidProj", username = "admin", password = "admin123456";
+        String ip = "10.0.2.2", port = "1433", db = "AndroidProj", username = "sa", password = "PaSSw0rd!";
 
         StrictMode.ThreadPolicy a = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(a);

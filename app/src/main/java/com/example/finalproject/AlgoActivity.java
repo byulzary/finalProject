@@ -1,13 +1,18 @@
 package com.example.finalproject;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import org.xguzm.pathfinding.grid.NavigationGrid;
 import org.xguzm.pathfinding.grid.finders.AStarGridFinder;
@@ -17,6 +22,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,6 +34,7 @@ public class AlgoActivity extends AppCompatActivity {
     Connection connection;
     Bundle bundle;
     int listId;
+    int uid;
     List<NaviProduct> naviProducts;
     int numOfCollectedItems = 0;
     String dbMap = "";
@@ -48,6 +55,7 @@ public class AlgoActivity extends AppCompatActivity {
         bundle = new Bundle();
         bundle = getIntent().getExtras();
         listId = bundle.getInt("listId");
+        listId = bundle.getInt("uid");
         naviProducts = new ArrayList<>();
         System.out.println("listId:" + listId);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -83,16 +91,15 @@ public class AlgoActivity extends AppCompatActivity {
 //                "NbNNNNNNbN" +
 //                "NbNNNNNNbN";
 
-        findViewById(R.id.stamBtn).setOnClickListener(new View.OnClickListener() {
+        Button stamBtn = findViewById(R.id.stamBtn);
+        stamBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 numOfCollectedItems++;
                 if (numOfCollectedItems < naviProducts.size()) {
-
-
                     Matrix matrix = new Matrix(10, parseMap(dbMap));
                     Cell previousItem = path.get(path.size() - 1);
-                    NaviProduct np = naviProducts.get(numOfCollectedItems % naviProducts.size());
+                    NaviProduct np = naviProducts.get(numOfCollectedItems);
                     int targetX = np.loc_x;
                     int targetY = np.loc_y;
                     int startX = previousItem.x;
@@ -103,6 +110,15 @@ public class AlgoActivity extends AppCompatActivity {
                     rvAdapter.setMatrix(matrix);
                 } else {
 
+                    Toast toast = Toast.makeText(AlgoActivity.this, "Finished Navigation - Returning to Home Screen", Toast.LENGTH_LONG);
+                    toast.show();
+
+                    Intent intent = new Intent(AlgoActivity.this, MenuActivity.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("uid", uid);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
             }
 

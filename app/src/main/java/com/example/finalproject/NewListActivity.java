@@ -105,10 +105,11 @@ public class NewListActivity extends AppCompatActivity {
     }
 
     private void sendToAlgo(int listId) {
-        Bundle bundleListId = new Bundle();
-        bundleListId.putInt("listId", listId);
+        Bundle bundle = new Bundle();
+        bundle.putInt("listId", listId);
+        bundle.putInt("uid", uid);
         Intent intent = new Intent(this, AlgoActivity.class);
-        intent.putExtras(bundleListId);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 

@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.finalproject.Connection.ConnectionClass;
 
 import java.io.Console;
 import java.sql.Connection;
