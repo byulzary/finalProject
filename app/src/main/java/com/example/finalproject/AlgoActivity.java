@@ -14,7 +14,6 @@ import org.xguzm.pathfinding.grid.finders.AStarGridFinder;
 import org.xguzm.pathfinding.grid.finders.GridFinderOptions;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,6 +28,7 @@ public class AlgoActivity extends AppCompatActivity {
     int listId;
     List<NaviProduct> naviProducts;
     int numOfCollectedItems = 0;
+    String dbMap = "";
 
     private static final int GRID_SIZE = 100;
 
@@ -61,33 +61,47 @@ public class AlgoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_algo);
 
 
-        String dbSupermarketMap = "" +
-                "NbNNbNNNbN" +
-                "NbNNbNNNbN" +
-                "NbNNbNNNbN" +
-                "NNNNNNNNNN" +
-                "NbNNbNNNbN" +
-                "NbNNbNNNbN" +
-                "NbNNbNNNbN" +
-                "NbbbbNNNbN" +
-                "NbNNNNNNbN" +
-                "NbNNNNNNbN";
+        try {
+            dbMap = getMapFromDB(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(dbMap);
+
+//        String dbSupermarketMap = "" +
+//                "NbNNbNNNbN" +
+//                "NbNNbNNNbN" +
+//                "NbNNbNNNbN" +
+//                "NNNNNNNNNN" +
+//                "NbNNbNNNbN" +
+//                "NbNNbNNNbN" +
+//                "NbNNbNNNbN" +
+//                "NbbbbNNNbN" +
+//                "NbNNNNNNbN" +
+//                "NbNNNNNNbN";
 
         findViewById(R.id.stamBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 numOfCollectedItems++;
-                Matrix matrix = new Matrix(10, parseMap(dbSupermarketMap));
-                Cell previousItem = path.get(path.size() - 1);
-                NaviProduct np = naviProducts.get(numOfCollectedItems % naviProducts.size());
-                int targetX = np.loc_x;
-                int targetY = np.loc_y;
-                int startX = previousItem.x;
-                int startY = previousItem.y;
-                prepareMatrix(matrix, startX, startY, targetX, targetY);
-                List<Cell> path = getPath(matrix, previousItem.x, previousItem.y, targetX, targetY);
-                drawPath(path);
-                rvAdapter.setMatrix(matrix);
+                if (numOfCollectedItems <= naviProducts.size()) {
+
+
+                    Matrix matrix = new Matrix(10, parseMap(dbMap));
+                    Cell previousItem = path.get(path.size() - 1);
+                    NaviProduct np = naviProducts.get(numOfCollectedItems % naviProducts.size());
+                    int targetX = np.loc_x;
+                    int targetY = np.loc_y;
+                    int startX = previousItem.x;
+                    int startY = previousItem.y;
+                    prepareMatrix(matrix, startX, startY, targetX, targetY);
+                    List<Cell> path = getPath(matrix, previousItem.x, previousItem.y, targetX, targetY);
+                    drawPath(path);
+                    rvAdapter.setMatrix(matrix);
+                } else {
+
+                }
             }
 
         });
@@ -118,7 +132,7 @@ public class AlgoActivity extends AppCompatActivity {
         gridRv.setLayoutManager(new GridLayoutManager(this, GRID_SIZE / nColumns));
 
 
-        startMap = parseMap(dbSupermarketMap);
+        startMap = parseMap(dbMap);
 
         Matrix matrix = new Matrix(10, startMap);
 
@@ -154,6 +168,18 @@ public class AlgoActivity extends AppCompatActivity {
 //            }
 //
 //        }
+    }
+
+    private String getMapFromDB(Connection connection) throws SQLException {
+        String query = "select map from supermarket where id='1'";
+
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        String map = "";
+        while (rs.next()) {
+            map = rs.getString("map");
+        }
+        return map;
     }
 
     private void prepareMatrix(Matrix matrix, int startX, int startY, int targetX, int targetY) {

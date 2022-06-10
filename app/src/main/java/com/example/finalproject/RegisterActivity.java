@@ -25,10 +25,11 @@ import java.sql.Statement;
 
 public class RegisterActivity extends AppCompatActivity {
     Connection connection;
-    private Button registerButton;
+    private Button registerButton, registerCancelButton;
     TextView status;
-    EditText email, password, verPass, name, phone, address;
+    EditText email, password, name, phone, address;
     //EditText  id;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +37,12 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         email = (EditText) findViewById(R.id.editEmailReg);
         password = (EditText) findViewById(R.id.editPasswordReg);
-        verPass = (EditText) findViewById(R.id.editPassowrdRegVer);
         registerButton = findViewById(R.id.buttonFinishReg);
-        status = findViewById(R.id.statusTextView);
         name = (EditText) findViewById(R.id.editTextRegName);
-        //id = (EditText) findViewById(R.id.editIDReg);
         phone = (EditText) findViewById(R.id.editTextPhone);
         address = (EditText) findViewById(R.id.editTextRegAddress);
+        registerCancelButton = findViewById(R.id.cancelRegiButton);
+
         String statementCount = "select * from users";
         int count = 0;
 
@@ -71,8 +71,6 @@ public class RegisterActivity extends AppCompatActivity {
                 String myphone = phone.getText().toString();
                 String mypassword = password.getText().toString();
                 String myaddress = address.getText().toString();
-                String mypasswordVerify = verPass.getText().toString();
-                int tryRegister = tryRegister(myemail, password, mypasswordVerify);
                 String statement = "insert into users(userID," +
                         " name," +
                         " phone, " +
@@ -97,14 +95,11 @@ public class RegisterActivity extends AppCompatActivity {
 //                    Log.d("myTag", set.getString(2));
 //                }
                 connection.close();
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
             } catch (Exception e) {
                 Log.e("error: ", e.getMessage(), e);
             }
         });
-    }
-
-    private int tryRegister(String myemail, EditText password, String mypasswordVerify) {
-
-        return 1;
     }
 }

@@ -23,23 +23,12 @@
         android:id="@+id/editPasswordReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="Enter Password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/editPassowrdRegVer"
         app:layout_constraintEnd_toEndOf="@+id/editEmailReg"
-        app:layout_constraintStart_toStartOf="@+id/editEmailReg"
-        app:layout_constraintTop_toBottomOf="@+id/editEmailReg" />
-
-    <EditText
-        android:id="@+id/editPassowrdRegVer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:ems="10"
-        android:hint="Verify Password"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/editEmailReg"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/editEmailReg"
         app:layout_constraintTop_toBottomOf="@+id/editEmailReg" />
 
@@ -49,21 +38,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="Register"
-        app:layout_constraintEnd_toEndOf="@+id/editPassowrdRegVer"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/editPassowrdRegVer"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRegAddress"
+        app:layout_constraintStart_toStartOf="@+id/editTextRegAddress"
         app:layout_constraintTop_toBottomOf="@+id/editTextRegAddress" />
-
-    <TextView
-        android:id="@+id/statusTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="status"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonFinishReg" />
 
     <EditText
         android:id="@+id/editTextPhone"
@@ -81,7 +58,7 @@
         android:id="@+id/editTextRegName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="100dp"
         android:ems="10"
         android:hint="name"
         android:inputType="textPersonName"
@@ -97,8 +74,17 @@
         android:ems="10"
         android:hint="address"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/editPassowrdRegVer"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/editPassowrdRegVer"
-        app:layout_constraintTop_toBottomOf="@+id/editPassowrdRegVer" />
+        app:layout_constraintEnd_toEndOf="@+id/editPasswordReg"
+        app:layout_constraintStart_toStartOf="@+id/editPasswordReg"
+        app:layout_constraintTop_toBottomOf="@+id/editPasswordReg" />
+
+    <Button
+        android:id="@+id/cancelRegiButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Cancel"
+        app:layout_constraintEnd_toEndOf="@+id/buttonFinishReg"
+        app:layout_constraintStart_toStartOf="@+id/buttonFinishReg"
+        app:layout_constraintTop_toBottomOf="@+id/buttonFinishReg" />
 </androidx.constraintlayout.widget.ConstraintLayout>
