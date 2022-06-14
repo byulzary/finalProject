@@ -33,16 +33,14 @@ public class MenuActivity extends AppCompatActivity {
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-//                startActivity(new Intent(this, NewListActivity.class));
-//                break;
+
             case R.id.pastListsButton:
                 intent = new Intent(this, PastListsActivity.class);
                 bundle.putInt("uid", uid);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-//                startActivity(new Intent(this, PastListsActivity.class));
-//                break;
+
             case R.id.aboutButton:
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
@@ -52,8 +50,6 @@ public class MenuActivity extends AppCompatActivity {
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-//                startActivity(new Intent(this, SettingsActivity.class));
-//                break;
             case R.id.logoutButton:
                 logout();
                 break;

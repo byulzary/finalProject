@@ -69,9 +69,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     intent.putExtras(bundle);
                     startActivity(intent);
                     break;
-//                    startActivity(new Intent(this, MenuActivity.class));
-
-
                 }
         }
     }

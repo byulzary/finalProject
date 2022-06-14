@@ -7,6 +7,7 @@ import android.util.Log;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+//Local pc database, do not use!
 //public static String ip = "10.100.102.39";
 //public static String un = "admin";
 //public static String pass = "admin123456";

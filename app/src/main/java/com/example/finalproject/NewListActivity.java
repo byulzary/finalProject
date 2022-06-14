@@ -136,23 +136,6 @@ public class NewListActivity extends AppCompatActivity {
         pstmt.setString(2, listName);
         pstmt.executeUpdate();
 
-
-//                query =
-//                "insert into user_lists" +
-//                        "(list_id,name) values" +
-//                        "('"
-//                        +userListsCount
-//                        +
-//                        "','"
-//                        +listName
-//                        +"')'";
-//        PreparedStatement preparedStatement=connection.prepareStatement(query);
-//        preparedStatement.executeUpdate();
-//
-//        Statement st= connection.createStatement();
-//       // st.executeUpdate(query);
-
-
         //count user_lists_rel
         int userListRelCount = 0;
         query = "select * from user_lists_rel where user_id=" + uid;
@@ -189,86 +172,11 @@ public class NewListActivity extends AppCompatActivity {
                             "," + userListsCount + "," +
                             RecyclerAdapter.userList.get(i).getId() + "," + RecyclerAdapter.userList.get(i).getAmount() +
                             ")";
-            //System.out.println(RecyclerAdapter.userList.get(i).getId() + "|" +
-            // RecyclerAdapter.userList.get(i).getAmount());
             Statement st;
             st = connection.createStatement();
             st.executeUpdate(query);
             userListItemCount++;
         }
-
-
-//        //insert into user_list_items
-//        query="insert into user_list_items(id, list_id, item_id) values (?,?,?)";
-//        pStmt = connection.prepareStatement(query);
-//        pStmt.setInt(1, userListItemCount);
-//        pStmt.setInt(2, uid);
-//        pStmt.setInt(3, userListsCount);
-//        pStmt.executeUpdate();
-
-//
-//
-//        //inser into user_lists_rel
-//        query="insert into user_lists_rel(id, user_id, list_id) values (?,?,?)";
-//        PreparedStatement pStmt = connection.prepareStatement(query);
-//        pStmt.setInt(1, count);
-//        pStmt.setInt(2, uid);
-//        pStmt.setInt(3, count);
-//        //  ResultSet set = stmt.executeUpdate(statement);
-//        pStmt.executeUpdate();
-//
-//        //count user_lists
-//        int countUserLists=0;
-//        query="select * from user_lists";
-
-
-//        int numOfLists=0;
-//        //insert into user_lists
-//        String queryUserLists=
-//                "insert into user_lists(list_id,name) values("+numOfLists+","+"'test')";
-//        Statement st= connection.createStatement();
-//        st.executeUpdate(queryUserLists);
-//        //count rows for user_lists_rel
-//        int ULRCount=0;
-//        String queryCount = "select * from user_lists_rel where user_id=" + uid;
-//        Statement countStmt = connection.createStatement();
-//        ResultSet rs = countStmt.executeQuery(queryCount);
-//        while(rs.next()){
-//            ULRCount++;
-//        }
-//        queryCount="select * from user_lists_rel where user_id="+uid;
-//
-//        countStmt=connection.createStatement();
-//        rs = countStmt.executeQuery(queryCount);
-//        while(rs.next()){
-//            numOfLists++;
-//        }
-//        numOfLists++;
-//        System.out.println("number of lists for user: "+numOfLists);
-//
-//
-//
-//        System.out.println("UID: "+uid+", ULRCount: "+ULRCount);
-
-//        for (int i = 0; i < RecyclerAdapter.userList.size(); i++) {
-//
-//
-//
-//            //insert into user_lists_rel
-//
-//
-//
-//
-//
-////            String query =
-////                    "insert into user_list_items(id, list_id, item_id) values('1'," + "'1'," +
-////                            RecyclerAdapter.userList.get(0).getId() +
-////                            ")";
-////            System.out.println(RecyclerAdapter.userList.get(i).getId() + "|" + RecyclerAdapter.userList.get(i).getAmount());
-////            Statement st = connection.createStatement();
-////            st.executeUpdate(query);
-//
-//        }
         return userListsCount;
     }
 

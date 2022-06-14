@@ -57,13 +57,10 @@ public class RegisterActivity extends AppCompatActivity {
             throwables.printStackTrace();
         }
 
-//        ConSQL c = new ConSQL();
-//        connection = c.conclass();
         int finalCount = count;
         registerButton.setOnClickListener(v -> {
 
             try {
-                //int myId = Integer.parseInt(id.getText().toString());
                 int myId = finalCount + 1;
                 String myname = name.getText().toString();
                 String myemail = email.getText().toString();
@@ -87,12 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
                 stmt.setString(4, myaddress);
                 stmt.setString(5, myemail);
                 stmt.setString(6, mypassword);
-                //  ResultSet set = stmt.executeUpdate(statement);
                 stmt.executeUpdate();
-//                while (set.next()) {
-//                    status.setText(set.getString(2));
-//                    Log.d("myTag", set.getString(2));
-//                }
                 connection.close();
                 intent = new Intent(this, MainActivity.class);
                 startActivity(intent);

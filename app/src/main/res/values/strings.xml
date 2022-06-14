@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">FinalProject</string>
-    <string name="app_owner">Application Owners: Nathan Meimoun, Barak Yulzary</string>
-    <string name="about_app">About: This app is intended for educational purposes only.
+    <string name="app_owner">Application Owners: Barak Yulzary</string>
+    <string name="about_app">About: This application is intended for educational purposes only.
         Every image and/or product and/or supermarket which bear any similarity to a real-life
-        counterpart featured in the app is purely coincidence and we do not claim ownership
-    over the images</string>
+        counterpart featured in the app is purely coincidence and we I not claim ownership
+    over the images or information presented in the application</string>
     <string name="title_activity_new_list">NewListActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

@@ -1,12 +1,10 @@
 package com.example.finalproject;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -22,7 +20,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -77,25 +74,13 @@ public class AlgoActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-//        System.out.println(dbMap);
 
-//        String dbSupermarketMap = "" +
-//                "NbNNbNNNbN" +
-//                "NbNNbNNNbN" +
-//                "NbNNbNNNbN" +
-//                "NNNNNNNNNN" +
-//                "NbNNbNNNbN" +
-//                "NbNNbNNNbN" +
-//                "NbNNbNNNbN" +
-//                "NbbbbNNNbN" +
-//                "NbNNNNNNbN" +
-//                "NbNNNNNNbN";
-
-        Button stamBtn = findViewById(R.id.stamBtn);
-        stamBtn.setOnClickListener(new View.OnClickListener() {
+        Button nextItemButton = findViewById(R.id.nextItemBtn);
+        nextItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 numOfCollectedItems++;
+
                 if (numOfCollectedItems < naviProducts.size()) {
                     Matrix matrix = new Matrix(10, parseMap(dbMap));
                     Cell previousItem = path.get(path.size() - 1);
@@ -127,25 +112,6 @@ public class AlgoActivity extends AppCompatActivity {
 
         gridRv = findViewById(R.id.gridViewAlgo);
 
-        // TODO: 05/06/2022 restore
-//
-//        try {
-//            createProductArray(naviProducts,connection);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        createProductArray(naviProducts,connection);
-//        try {
-//            createProductArray(naviProducts, connection);
-////            createBarrierArray(barriers, connection);
-////            for (int i = 0; i < barriers.size(); i++) {
-////                isBarrier.add(barriers.get(i).getIsBarrier());
-////            }
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-
-
         int nColumns = 10;
         gridRv.setLayoutManager(new GridLayoutManager(this, GRID_SIZE / nColumns));
 
@@ -173,44 +139,37 @@ public class AlgoActivity extends AppCompatActivity {
         matrix.get(startX, startY).setType(Cell.Type.Start);
         drawPath(path);
 
-//                .collect(Collectors.toList());
-//        int r = rand.nextInt(10);
-//        int c = rand.nextInt(10);
-//        m.set(r,c, );
 
         rvAdapter = new SupermarketMapAdapter(matrix, nColumns);
         gridRv.setItemAnimator(null);
 
         gridRv.setAdapter(rvAdapter);
 
-//        gridView.onview
-//        for (int i = 0; i < number.length; i++) {
-//            if (number[i].equals("B")) {
-//                gridView.getChildAt(i).setBackgroundColor(Color.BLACK);
-//            }
-//
-//        }
+
     }
 
     private void sortItemsList(int startX, int startY, List<NaviProduct> naviProducts) {
-        Collections.sort(naviProducts, new Comparator<NaviProduct>() {
-            @Override
-            public int compare(NaviProduct o1, NaviProduct o2) {
-                double aerialDistance1, aerialDistance2;
-                double toRoot1, toRoot2;
-                toRoot1 =
-                        (o1.loc_x - startX) * (o1.loc_x - startX) + (o1.loc_y - startY) * (o1.loc_y - startY);
-                toRoot2 =
-                        (o2.loc_x - startX) * (o2.loc_x - startX) + (o2.loc_y - startY) * (o2.loc_y - startY);
-
-                aerialDistance1 = Math.sqrt(toRoot1);
-                aerialDistance2 = Math.sqrt(toRoot1);
-
-                if (aerialDistance1 - aerialDistance2 > 0)
-                    return -1;
-                return 1;
+        double dX1, dX2, dY1, dY2, dXY1, dXY2;
+        NaviProduct np1;
+        NaviProduct np2;
+        NaviProduct tempProd;
+        for (int i=0;i<naviProducts.size();i++){
+            np1=naviProducts.get(i);
+            dX1=np1.loc_x-startX;
+            dY1=np1.loc_y-startY;
+            dXY1=Math.sqrt(dX1*dX1+dY1*dY1);
+            for (int j=i;j<naviProducts.size();j++){
+                np2=naviProducts.get(j);
+                dX2=np2.loc_x-startX;
+                dY2=np2.loc_y-startY;
+                dXY2=Math.sqrt(dX2*dX2+dY2*dY2);
+                if (dXY1>dXY2){
+                    tempProd=naviProducts.get(i);
+                    naviProducts.set(i, np2);
+                    naviProducts.set(j, tempProd);
+                }
             }
-        });
+        }
     }
 
     private String getMapFromDB(Connection connection) throws SQLException {
@@ -262,7 +221,6 @@ public class AlgoActivity extends AppCompatActivity {
     @NonNull
     private List<Cell> parseMap(String fromDb) {
         List<Character> split = Arrays.stream(fromDb.split("")).map(a -> a.charAt(0)).collect(Collectors.toList());
-//        List<String> symbols = Arrays.asList(split);
 
         List<Cell> cells = split
                 .stream()
@@ -276,12 +234,8 @@ public class AlgoActivity extends AppCompatActivity {
 
     private List<NaviProduct> createProductArray(List<NaviProduct> naviProducts,
                                                  Connection connection) throws SQLException {
-//        List<NaviProduct> s = new ArrayList<>();
-//        s.add(new NaviProduct("", 0, 0, 0, 0, 0));
-//        s.add(new NaviProduct("", 0, 5, 0, 0, 0));
-//        s.add(new NaviProduct("", 5, 3, 0, 0, 0));
-//        s.add(new NaviProduct("", 9, 9, 0, 0, 0));
-//       // return s;
+
+
         String query = " select item_id, name, amount, " +
                 "loc_x, loc_y,loc_z, itemDesc " +
                 "from user_list_items join items" +
@@ -289,8 +243,6 @@ public class AlgoActivity extends AppCompatActivity {
                 " where list_id=" + listId;
 
         Statement stmt = connection.createStatement();
-//        PreparedStatement stmt = connection.prepareStatement(query);
-//        stmt.setInt(1, listId);
         int index = 0;
         ResultSet rs = stmt.executeQuery(query);
         while (rs.next()) {
@@ -312,21 +264,4 @@ public class AlgoActivity extends AppCompatActivity {
         return naviProducts;
     }
 
-    private void createBarrierArray(ArrayList<Cell> cells,
-                                    Connection connection) {
-        for (int i = 0; i < 10; i++) {
-            int startX = i;
-            int startY = i;
-            int endX = i;
-            int endY = i;
-//            Cell cell = new Cell();
-//            Random random = new Random();
-//            cell.setIsBarrier(random.nextBoolean());
-//            cells.add(cell);
-        }
-//        System.out.println("Barriers: ");
-//        for (int i = 0; i < cells.size(); i++) {
-//            System.out.println(cells.get(i).isBarrier);
-//        }
-    }
 }
